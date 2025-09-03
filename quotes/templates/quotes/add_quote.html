@@ -1,0 +1,14 @@
+{% extends "quotes/base.html" %}
+
+{% block title %}Добавить цитату{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Добавить новую цитату</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Сохранить</button>
+    </form>
+</div>
+{% endblock %}

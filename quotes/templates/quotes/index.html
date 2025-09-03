@@ -1,0 +1,19 @@
+{% extends "quotes/base.html" %}
+
+{% block title %}Случайная цитата{% endblock %}
+
+{% block content %}
+<div class="quote-card">
+    <p class="quote-text">"{{ quote.text }}"</p>
+    <p class="quote-source">— {{ quote.source.name }}</p>
+    <p class="quote-stats">👁 {{ quote.view_count }} просмотров</p>
+
+    <div class="quote-actions">
+        <form method="post" action="">
+            {% csrf_token %}
+            <button type="submit" name="like">👍 {{ quote.likes }}</button>
+            <button type="submit" name="dislike">👎 {{ quote.dislikes }}</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
