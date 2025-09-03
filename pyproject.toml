@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "quote-project-django"
+version = "0.1.0"
+description = ""
+authors = ["natalia_levant <an_smir@mail.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "^5.2.6"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
