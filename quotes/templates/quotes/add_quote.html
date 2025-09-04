@@ -1,13 +1,39 @@
 {% extends "quotes/base.html" %}
 
-{% block title %}Добавить цитату{% endblock %}
-
 {% block content %}
 <div class="form-container">
     <h2>Добавить новую цитату</h2>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+
+        <div class="form-field">
+            {{ form.text.label_tag }}<br>
+            {{ form.text }}
+            {{ form.text.errors }}
+        </div>
+
+        <div class="form-field">
+            {{ form.source.label_tag }}<br>
+            {{ form.source }}
+            {{ form.source.errors }}
+        </div>
+
+        <div class="form-field">
+            {{ form.new_source.label_tag }}<br>
+            {{ form.new_source }}
+        </div>
+
+        <div class="form-field">
+            {{ form.new_source_type.label_tag }}<br>
+            {{ form.new_source_type }}
+        </div>
+
+        <div class="form-field">
+            <label>Вес цитаты:</label><br>
+            <span>Начальный вес = {{ form.base_weight.initial }}.<br>
+            Дальше вес изменяется автоматически: лайк увеличивает, дизлайк уменьшает.</span>
+        </div>
+
         <button type="submit">Сохранить</button>
     </form>
 </div>

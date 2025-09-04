@@ -10,24 +10,25 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext
 
 class Source(models.Model):
-    """
-    Модель Source представляет источник цитат
-    """
+    """Модель представляет источник цитат"""
+    SOURCE_TYPES = [
+        ("movie", "Фильм"),
+        ("book", "Книга"),
+        ("play", "Спектакль"),
+        ("other", "Другое"),
+    ]
+
+    name = models.CharField(max_length=100, db_index=True)
+    type = models.CharField(max_length=20, choices=SOURCE_TYPES, default="other")
 
     class Meta:
         ordering = ["name"]
-        verbose_name = _("Source")
-        verbose_name_plural = _("Sources")
-
-    name = models.CharField(
-        max_length=100,
-        verbose_name=_("Name"),
-        help_text=_("Enter source name"),
-        db_index=True,
-    )
+        verbose_name = _["Source"]
+        verbose_name_plural = _["Sources"]
 
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.get_type_display()})"
+
 
 class QuoteManager(models.Manager):
     """Менеджер для модели Quotes
@@ -56,14 +57,19 @@ class Quote(models.Model):
         verbose_name_plural = _("Quote")
 
     text = models.TextField(unique=True)
-    source = models.ForeignKey(
-        Source,
-        on_delete=models.CASCADE,
-    )
-    weight = models.PositiveIntegerField(default=1)
+    source = models.ForeignKey(Source, on_delete=models.CASCADE)
+    base_weight = models.PositiveIntegerField(default=5)  # номинальный вес
     view_count = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
     dislikes = models.IntegerField(default=0)
+
     objects = QuoteManager()
+
+    @property
+    def weight(self):
+        """Динамический вес: номинальный + лайки - дизлайки"""
+        return max(1, self.base_weight + self.likes - self.dislikes)
+
     def __str__(self):
         return self.text
+
