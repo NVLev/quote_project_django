@@ -1,0 +1,42 @@
+{% extends "quotes/base.html" %}
+
+{% block title %}Топ-10 цитат{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>🎯 Топ-10 самых популярных цитат</h1>
+    <p class="subtitle">Рейтинг по количеству лайков</p>
+
+    {% if top_quotes %}
+        <div class="quotes-list">
+            {% for quote in top_quotes %}
+            <div class="quote-card {% if forloop.first %}first-place{% endif %}">
+                <div class="quote-rank">#{{ forloop.counter }}</div>
+
+                <blockquote class="quote-text">"{{ quote.text }}"</blockquote>
+
+                <div class="quote-meta">
+                    <span class="quote-source">— {{ quote.source.name }} ({{ quote.source.get_type_display }})</span>
+
+                    <div class="quote-stats">
+                        <span class="stat likes">👍 {{ quote.likes }}</span>
+                        <span class="stat dislikes">👎 {{ quote.dislikes }}</span>
+                        <span class="stat views">👁 {{ quote.view_count }}</span>
+                        <span class="stat weight">⚖️ {{ quote.weight }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <p>Пока нет цитат для рейтинга. <a href="{% url 'quotes:add_quote' %}">Добавьте первую!</a></p>
+        </div>
+    {% endif %}
+
+    <div class="navigation">
+        <a href="{% url 'quotes:random_quote' %}" class="btn">← Назад к случайной цитате</a>
+        <a href="{% url 'quotes:add_quote' %}" class="btn">➕ Добавить цитату</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,6 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import QuoteForm
 from .models import Quote
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 def random_quote_view(request):
     """
@@ -44,6 +48,9 @@ def like_quote_view(request, quote_id):
         quote.likes += 1
         quote.save()
         request.session[session_key] = True
+        logger.info('Лайк успешно добавлен')
+    else:
+        logger.info('Лайк уже добавлялся в этой сессии')
     return redirect('quotes:random_quote')
 
 def dislike_quote_view(request, quote_id):
@@ -57,4 +64,18 @@ def dislike_quote_view(request, quote_id):
         quote.dislikes += 1
         quote.save()
         request.session[session_key] = True
+        logger.info('Дизлайк успешно добавлен')
+    else:
+        logger.info('Дизлайк уже добавлялся в этой сессии')
     return redirect('quotes:random_quote')
+
+def top_quotes_view(request):
+    """
+    Представление для страницы самых "весомых" цитат
+    """
+    top_quotes = Quote.objects.all().order_by('-likes')[:10]
+
+    return render(request, 'quotes/top_quotes.html', {
+        'top_quotes': top_quotes,
+        'title': 'Топ-10 цитат по лайкам'
+    })
