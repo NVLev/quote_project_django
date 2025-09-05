@@ -9,11 +9,18 @@
     <p class="quote-stats">👁 {{ quote.view_count }} просмотров</p>
 
     <div class="quote-actions">
-        <form method="post" action="">
+        <form method="post" action="{% url 'quotes:like_quote' quote.id %}">
             {% csrf_token %}
-            <button type="submit" name="like">👍 {{ quote.likes }}</button>
-            <button type="submit" name="dislike">👎 {{ quote.dislikes }}</button>
+            <button type="submit">👍 {{ quote.likes }}</button>
         </form>
+
+        <form method="post" action="{% url 'quotes:dislike_quote' quote.id %}">
+            {% csrf_token %}
+            <button type="submit">👎 {{ quote.dislikes }}</button>
+        </form>
+
     </div>
+
+
 </div>
 {% endblock %}

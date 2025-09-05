@@ -23,8 +23,8 @@ class Source(models.Model):
 
     class Meta:
         ordering = ["name"]
-        verbose_name = _["Source"]
-        verbose_name_plural = _["Sources"]
+        verbose_name = _("Source")
+        verbose_name_plural = _("Sources")
 
     def __str__(self):
         return f"{self.name} ({self.get_type_display()})"
@@ -32,21 +32,27 @@ class Source(models.Model):
 
 class QuoteManager(models.Manager):
     """Менеджер для модели Quotes
-        настраивает вывод цитат в соответствии с весом"""
+       настраивает вывод цитат в соответствии с весом"""
+
     def random(self):
-        total_weight = self.aggregate(total=Sum('weight'))['total']
-        if total_weight is None or total_weight == 0:
-            return random.choice(self.all()) if self.exists() else None
+        quotes = list(self.all())
+        if not quotes:
+            return None
+
+        total_weight = sum(q.weight for q in quotes)
+        if total_weight == 0:
+            return random.choice(quotes)
 
         random_index = random.uniform(0, total_weight)
         current = 0
 
-        for quote in self.all():
+        for quote in quotes:
             current += quote.weight
             if current > random_index:
                 return quote
 
-        return random.choice(self.all())
+        return random.choice(quotes)
+
 
 class Quote(models.Model):
     """
@@ -58,7 +64,7 @@ class Quote(models.Model):
 
     text = models.TextField(unique=True)
     source = models.ForeignKey(Source, on_delete=models.CASCADE)
-    base_weight = models.PositiveIntegerField(default=5)  # номинальный вес
+    base_weight = models.PositiveIntegerField(default=5)
     view_count = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
     dislikes = models.IntegerField(default=0)

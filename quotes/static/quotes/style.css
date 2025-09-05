@@ -55,6 +55,20 @@ main {
     color: #777;
 }
 
+
+.quote-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.quote-actions form {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
 .quote-actions button {
     background: #4a76a8;
     color: white;

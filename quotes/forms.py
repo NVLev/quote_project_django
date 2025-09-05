@@ -20,7 +20,7 @@ class QuoteForm(forms.ModelForm):
 
     class Meta:
         model = Quote
-        fields = ['text', 'source', 'weight']
+        fields = ['text', 'source', 'base_weight']
         labels = {
             'text': 'Текст цитаты',
             'source': 'Выберите источник',
@@ -37,6 +37,8 @@ class QuoteForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["base_weight"].disabled = True
         self.fields["base_weight"].initial = 5
+        self.fields['source'].required = False
+        self.fields['source'].empty_label = "--- Выберите источник ---"
 
     def clean(self):
         cleaned_data = super().clean()
@@ -47,6 +49,7 @@ class QuoteForm(forms.ModelForm):
 
         if Quote.objects.filter(text=text).exists():
             raise forms.ValidationError("Такая цитата уже существует в базе!")
+
         if not source and not new_source_name:
             raise forms.ValidationError(
                 "Нужно либо выбрать существующий источник, либо ввести новый!"
@@ -56,18 +59,22 @@ class QuoteForm(forms.ModelForm):
                 "Нельзя одновременно выбрать источник и ввести новый!"
             )
 
-        final_source = source
+        final_source = None
 
-        if new_source_name:
-            final_source, _ = Source.objects.get_or_create(
-                name=new_source_name,
-                defaults={"type": new_source_type or "other"}
-            )
+        if source:
+            final_source = source
 
-        if final_source and Quote.objects.filter(source=final_source).count() >= 3:
-            raise forms.ValidationError(
-                f"У источника '{final_source.name}' уже есть 3 цитаты. Лимит исчерпан."
+        elif new_source_name:
+            source_type = new_source_type or "other"
+            final_source, created = Source.objects.get_or_create(
+                name=new_source_name.strip(),
+                defaults={"type": source_type}
             )
+        if final_source is None:
+            raise forms.ValidationError("Произошла ошибка при определении источника. Попробуйте еще раз.")
+
+        if Quote.objects.filter(source=final_source).count() >= 3:
+            raise forms.ValidationError(f"У источника '{final_source.name}' уже есть 3 цитаты. Лимит исчерпан.")
 
         cleaned_data["source"] = final_source
         return cleaned_data

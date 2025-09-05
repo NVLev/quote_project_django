@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import QuoteForm
 from .models import Quote
 
@@ -27,8 +27,34 @@ def add_quote_view(request):
         form = QuoteForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('random_quote')
+            return redirect('quotes:random_quote')
     else:
         form = QuoteForm()
 
     return render(request, 'quotes/add_quote.html', {'form': form})
+
+def like_quote_view(request, quote_id):
+    """
+    Представление для лайков.
+    Увеличивает счетчик лайков цитаты.
+    """
+    quote = get_object_or_404(Quote, id=quote_id)
+    session_key = f'voted_quote_{quote_id}'
+    if not request.session.get(session_key):
+        quote.likes += 1
+        quote.save()
+        request.session[session_key] = True
+    return redirect('quotes:random_quote')
+
+def dislike_quote_view(request, quote_id):
+    """
+    Представление для дизлайков.
+    Увеличивает счетчик дизлайков цитаты.
+    """
+    quote = get_object_or_404(Quote, id=quote_id)
+    session_key = f'voted_quote_{quote_id}'
+    if not request.session.get(session_key):
+        quote.dislikes += 1
+        quote.save()
+        request.session[session_key] = True
+    return redirect('quotes:random_quote')
