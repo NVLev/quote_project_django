@@ -64,7 +64,7 @@ main {
 }
 
 .quote-actions form {
-    display: inline;
+    display: inline-block;
     margin: 0;
     padding: 0;
 }

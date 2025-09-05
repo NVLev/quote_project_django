@@ -1,7 +1,6 @@
 from django import forms
 from .models import Quote, Source
 
-
 class QuoteForm(forms.ModelForm):
     """
     Форма для добавления цитаты, с выбором источника и валидацией
