@@ -68,6 +68,13 @@ class Quote(models.Model):
     view_count = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
     dislikes = models.IntegerField(default=0)
+    author = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Автор"
+    )
 
     objects = QuoteManager()
 

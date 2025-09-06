@@ -77,3 +77,11 @@ class QuoteForm(forms.ModelForm):
 
         cleaned_data["source"] = final_source
         return cleaned_data
+
+    def save(self, commit=True, user=None):
+        instance = super().save(commit=False)
+        if user and user.is_authenticated:
+            instance.author = user
+        if commit:
+            instance.save()
+        return instance

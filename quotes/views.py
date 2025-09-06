@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .forms import QuoteForm
 from .models import Quote
+from users.decorators import vote_login_required
 import logging
 
 logger = logging.getLogger(__name__)
@@ -30,13 +33,14 @@ def add_quote_view(request):
     if request.method == 'POST':
         form = QuoteForm(request.POST)
         if form.is_valid():
-            form.save()
+            form.save(user=request.user)
             return redirect('quotes:random_quote')
     else:
         form = QuoteForm()
 
     return render(request, 'quotes/add_quote.html', {'form': form})
 
+@vote_login_required
 def like_quote_view(request, quote_id):
     """
     Представление для лайков.
@@ -48,11 +52,14 @@ def like_quote_view(request, quote_id):
         quote.likes += 1
         quote.save()
         request.session[session_key] = True
+        messages.success(request, "Ваш голос учтен!")
         logger.info('Лайк успешно добавлен')
     else:
+        messages.success(request, "Вы уже голосовали за эту цитату!")
         logger.info('Лайк уже добавлялся в этой сессии')
     return redirect('quotes:random_quote')
 
+@vote_login_required
 def dislike_quote_view(request, quote_id):
     """
     Представление для дизлайков.
