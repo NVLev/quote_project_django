@@ -1,15 +1,17 @@
 import pytest
-from django.urls import reverse
-from quotes.models import Quote, Source
 from django.contrib.auth.models import User
+from django.urls import reverse
+
 from quotes.forms import QuoteForm
+from quotes.models import Quote, Source
+
 
 @pytest.mark.django_db
 def test_random_quote_view(client):
     source = Source.objects.create(name="Test Book")
     Quote.objects.create(text="Test quote", source=source, base_weight=5)
 
-    response = client.get(reverse('quotes:random_quote'))
+    response = client.get(reverse("quotes:random_quote"))
     assert response.status_code == 200
     assert b"Test quote" in response.content
 
@@ -22,8 +24,8 @@ def test_add_quote_limit(client):
         Quote.objects.create(text=f"Quote {i}", source=source)
 
     form_data = {
-        'text': 'Quote 4',
-        'source': source.id,
+        "text": "Quote 4",
+        "source": source.id,
     }
     form = QuoteForm(data=form_data)
 
@@ -41,7 +43,7 @@ def test_add_quote_limit(client):
 def test_like_quote_authenticated(client, user, quote):
     """Тест лайка от авторизованного пользователя"""
     client.force_login(user)
-    url = reverse('quotes:like_quote', args=[quote.id])
+    url = reverse("quotes:like_quote", args=[quote.id])
 
     response = client.post(url)
 
@@ -49,7 +51,7 @@ def test_like_quote_authenticated(client, user, quote):
     assert response.status_code == 302
     assert quote.likes == 1
 
-    session_key = f'voted_quote_{quote.id}'
+    session_key = f"voted_quote_{quote.id}"
     assert session_key in client.session
     assert client.session[session_key] is True
 
@@ -58,14 +60,14 @@ def test_like_quote_authenticated(client, user, quote):
 def test_dislike_quote_authenticated(client, user, quote):
     """Тест дизлайка от авторизованного пользователя"""
     client.force_login(user)
-    url = reverse('quotes:dislike_quote', args=[quote.id])
+    url = reverse("quotes:dislike_quote", args=[quote.id])
 
     response = client.post(url)
 
     quote.refresh_from_db()
     assert response.status_code == 302
     assert quote.dislikes == 1
-    session_key = f'voted_quote_{quote.id}'
+    session_key = f"voted_quote_{quote.id}"
     assert session_key in client.session
     assert client.session[session_key] is True
 
@@ -73,12 +75,12 @@ def test_dislike_quote_authenticated(client, user, quote):
 @pytest.mark.django_db
 def test_like_quote_anonymous(client, quote):
     """Тест что анонимный пользователь перенаправляется на логин"""
-    url = reverse('quotes:like_quote', args=[quote.id])
+    url = reverse("quotes:like_quote", args=[quote.id])
 
     response = client.post(url)
 
     assert response.status_code == 302
-    assert response.url.startswith('/users/login/')  # Перенаправление на логин
+    assert response.url.startswith("/users/login/")  # Перенаправление на логин
     quote.refresh_from_db()
     assert quote.likes == 0
 
@@ -87,7 +89,7 @@ def test_like_quote_anonymous(client, quote):
 def test_double_vote_prevention(client, user, quote):
     """Тест защиты от двойного голосования"""
     client.force_login(user)
-    url_like = reverse('quotes:like_quote', args=[quote.id])
+    url_like = reverse("quotes:like_quote", args=[quote.id])
 
     client.post(url_like)
     quote.refresh_from_db()
@@ -107,14 +109,14 @@ def test_top_quotes_view(client):
     quote2 = Quote.objects.create(text="Quote 2", source=source, likes=5)
     quote3 = Quote.objects.create(text="Quote 3", source=source, likes=15)
 
-    url = reverse('quotes:top_quotes')
+    url = reverse("quotes:top_quotes")
     response = client.get(url)
 
     assert response.status_code == 200
-    assert 'top_quotes' in response.context
-    assert len(response.context['top_quotes']) == 3
+    assert "top_quotes" in response.context
+    assert len(response.context["top_quotes"]) == 3
 
-    top_quotes = response.context['top_quotes']
+    top_quotes = response.context["top_quotes"]
     assert top_quotes[0].likes == 15
     assert top_quotes[1].likes == 10
     assert top_quotes[2].likes == 5

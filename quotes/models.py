@@ -1,16 +1,19 @@
-from django.db import models
+import random
 from itertools import count
 from tkinter.constants import CASCADE
-import random
+
 from django import forms
 from django.contrib.auth.models import User
+from django.db import models
 from django.db.models.aggregates import Sum
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext
 
+
 class Source(models.Model):
     """Модель представляет источник цитат"""
+
     SOURCE_TYPES = [
         ("movie", "Фильм"),
         ("book", "Книга"),
@@ -32,7 +35,7 @@ class Source(models.Model):
 
 class QuoteManager(models.Manager):
     """Менеджер для модели Quotes
-       настраивает вывод цитат в соответствии с весом"""
+    настраивает вывод цитат в соответствии с весом"""
 
     def random(self):
         quotes = list(self.all())
@@ -58,6 +61,7 @@ class Quote(models.Model):
     """
     Модель Quote представляет цитаты
     """
+
     class Meta:
         verbose_name = _("Quote")
         verbose_name_plural = _("Quote")
@@ -69,11 +73,7 @@ class Quote(models.Model):
     likes = models.IntegerField(default=0)
     dislikes = models.IntegerField(default=0)
     author = models.ForeignKey(
-        User,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        verbose_name="Автор"
+        User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Автор"
     )
 
     objects = QuoteManager()
@@ -85,4 +85,3 @@ class Quote(models.Model):
 
     def __str__(self):
         return self.text
-

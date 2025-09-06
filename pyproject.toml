@@ -9,6 +9,8 @@ readme = "README.md"
 python = "^3.12"
 django = "^5.2.6"
 pytest = "^8.4.2"
+black = "^25.1.0"
+isort = "^6.0.1"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -17,3 +19,15 @@ pytest-django = "^4.11.1"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 90
+target-version = ['py310']
+
+[tool.isort]
+profile = "black"
+line_length = 90
+multi_line_output = 3
+skip_gitignore = true
+skip_glob = ["**/migrations/*", "**/settings/*"]
+
