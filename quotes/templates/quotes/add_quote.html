@@ -5,7 +5,13 @@
     <h2>Добавить новую цитату</h2>
     <form method="post">
         {% csrf_token %}
-
+        {% if form.non_field_errors %}
+        <div class="form-errors">
+            {% for error in form.non_field_errors %}
+                <p class="error-message">{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
         <div class="form-field">
             {{ form.text.label_tag }}<br>
             {{ form.text }}
@@ -21,6 +27,7 @@
         <div class="form-field">
             {{ form.new_source.label_tag }}<br>
             {{ form.new_source }}
+            {{ form.new_source.errors }}
         </div>
 
         <div class="form-field">
