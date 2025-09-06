@@ -1,0 +1,31 @@
+{% extends "quotes/base.html" %}
+
+{% block title %}Вход в систему{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <h2>Вход в систему</h2>
+
+    <form method="post" class="auth-form">
+        {% csrf_token %}
+
+        <div class="form-field">
+            <label for="id_username">Имя пользователя:</label>
+            {{ form.username }}
+            {{ form.username.errors }}
+        </div>
+
+        <div class="form-field">
+            <label for="id_password">Пароль:</label>
+            {{ form.password }}
+            {{ form.password.errors }}
+        </div>
+
+        <button type="submit" class="btn">Войти</button>
+    </form>
+
+    <p class="auth-link">
+        Нет аккаунта? <a href="{% url 'users:register' %}">Зарегистрируйтесь</a>
+    </p>
+</div>
+{% endblock %}

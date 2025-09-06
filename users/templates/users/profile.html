@@ -1,0 +1,24 @@
+{% extends "quotes/base.html" %}
+
+{% block title %}Личный кабинет{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <h2>Личный кабинет</h2>
+
+    <div class="user-info">
+        <p><strong>Имя пользователя:</strong> {{ user.username }}</p>
+        <p><strong>Email:</strong> {{ user.email|default:"Не указан" }}</p>
+        <p><strong>Дата регистрации:</strong> {{ user.date_joined|date:"d.m.Y" }}</p>
+    </div>
+
+    <div class="profile-actions">
+        <a href="{% url 'users:user_stats' %}" class="btn">📊 Моя статистика</a>
+        <a href="{% url 'quotes:add_quote' %}" class="btn">➕ Добавить цитату</a>
+        <form method="post" action="{% url 'users:logout' %}" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-secondary">🚪 Выйти</button>
+</form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "quotes/base.html" %}
+
+{% block title %}Моя статистика{% endblock %}
+
+{% block content %}
+<div class="stats-container">
+    <h2>📊 Моя статистика</h2>
+
+    <div class="stats-summary">
+        <div class="stat-card">
+            <h3>{{ total_quotes }}</h3>
+            <p>Всего цитат</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ total_likes }}</h3>
+            <p>Всего лайков</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ total_views }}</h3>
+            <p>Всего просмотров</p>
+        </div>
+    </div>
+
+    {% if user_quotes %}
+    <h3>Мои цитаты:</h3>
+    <div class="user-quotes">
+        {% for quote in user_quotes %}
+        <div class="user-quote-card">
+            <blockquote>"{{ quote.text }}"</blockquote>
+            <div class="quote-meta">
+                <span>Источник: {{ quote.source.name }}</span>
+                <span>👍 {{ quote.likes }}</span>
+                <span>👎 {{ quote.dislikes }}</span>
+                <span>👁 {{ quote.view_count }}</span>
+                <span>⚖️ {{ quote.weight }}</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>У вас пока нет добавленных цитат.</p>
+    {% endif %}
+
+    <div class="navigation">
+        <a href="{% url 'users:profile' %}" class="btn">← Назад в профиль</a>
+        <a href="{% url 'quotes:add_quote' %}" class="btn">➕ Добавить цитату</a>
+    </div>
+</div>
+{% endblock %}

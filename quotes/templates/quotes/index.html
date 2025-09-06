@@ -1,4 +1,5 @@
 {% extends "quotes/base.html" %}
+{% load static %}
 
 {% block title %}Случайная цитата{% endblock %}
 
@@ -25,4 +26,28 @@
     <p>{{ error }}</p>
     <a href="{% url 'quotes:add_quote' %}">➕ Добавить цитату</a>
 {% endif %}
+
+<div class="character-container" style="text-align:center; margin-top:30px;">
+    <img id="character" src="{% static 'quotes/img/read.png' %}" alt="Character" style="max-width:200px;">
+</div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const images = [
+            "{% static 'quotes/img/read1.png' %}",
+            "{% static 'quotes/img/read2.png' %}",
+            "{% static 'quotes/img/cinema.png' %}",
+            "{% static 'quotes/img/write.png' %}"
+        ];
+
+        let index = 0;
+        const character = document.getElementById("character");
+
+        setInterval(() => {
+            index = (index + 1) % images.length;
+            character.src = images[index];
+        }, 2500); // каждые 2.5 секунды
+    });
+</script>
 {% endblock %}

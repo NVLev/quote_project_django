@@ -13,9 +13,20 @@
             <a href="{% url 'quotes:random_quote' %}">Главная</a>
             <a href="{% url 'quotes:add_quote' %}">Добавить цитату</a>
             <a href="{% url 'quotes:top_quotes' %}">Топ-10 цитат</a>
+            <a href="{% url 'users:login' %}">Войти</a>
+            <a href="{% url 'users:profile' %}">Профиль</a>
         </nav>
     </header>
-
+        {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+        <div class="message message-{{ message.tags }}">
+            {{ message }}
+            <button class="message-close" onclick="this.parentElement.style.display='none'">×</button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
     <main>
         {% block content %}{% endblock %}
     </main>

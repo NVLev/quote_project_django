@@ -103,3 +103,158 @@ form button {
 form button:hover {
     background: #365d84;
 }
+
+.auth-container,
+.profile-container,
+.stats-container {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.auth-container h2,
+.profile-container h2,
+.stats-container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.auth-form .form-field {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-form label {
+    margin-bottom: 0.3rem;
+    font-weight: bold;
+    color: #444;
+}
+
+.auth-form input {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.auth-form input:focus {
+    border-color: #4a76a8;
+    outline: none;
+}
+
+.error-message {
+    background: #ffe6e6;
+    color: #b30000;
+    border: 1px solid #ffb3b3;
+    padding: 0.8rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+.error-list {
+    color: #b30000;
+    font-size: 0.9rem;
+    margin-top: 0.2rem;
+}
+
+.help-text {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 0.3rem;
+}
+
+.auth-link,
+.auth-links {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.auth-link a,
+.auth-links a {
+    color: #4a76a8;
+    text-decoration: none;
+}
+
+.auth-link a:hover,
+.auth-links a:hover {
+    text-decoration: underline;
+}
+
+.user-info p {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+}
+
+.profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 1.5rem;
+}
+
+.profile-actions .btn {
+    width: 100%;
+    text-align: center;
+}
+
+/* Статистика */
+.stats-summary {
+    display: flex;
+    justify-content: space-around;
+    margin: 1.5rem 0;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.stat-card {
+    flex: 1;
+    min-width: 100px;
+    padding: 1rem;
+    background: #f5f5f5;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.stat-card h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #4a76a8;
+}
+
+.user-quotes {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.user-quote-card {
+    background: #fafafa;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #4a76a8;
+}
+
+.user-quote-card blockquote {
+    margin: 0 0 0.5rem;
+    font-style: italic;
+}
+
+.quote-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.navigation {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+}
