@@ -17,7 +17,7 @@ class Source(models.Model):
     SOURCE_TYPES = [
         ("movie", "Фильм"),
         ("book", "Книга"),
-        ("play", "Спектакль"),
+        ("play", "Крылатое выражение"),
         ("other", "Другое"),
     ]
 
