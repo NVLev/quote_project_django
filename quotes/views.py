@@ -77,8 +77,10 @@ def dislike_quote_view(request, quote_id):
         quote.dislikes += 1
         quote.save()
         request.session[session_key] = True
+        messages.success(request, "Ваш голос учтен!")
         logger.info("Дизлайк успешно добавлен")
     else:
+        messages.success(request, "Вы уже голосовали за эту цитату!")
         logger.info("Дизлайк уже добавлялся в этой сессии")
     return redirect("quotes:random_quote")
 
